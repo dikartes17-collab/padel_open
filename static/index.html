@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Padel Point — турнир</title>
+<title>Padel Point — турнір</title>
+<link rel="icon" href="https://padelpoint.com.ua/wp-content/uploads/2025/06/favicon-150x150.png" sizes="32x32">
 <style>
   :root {
     --accent: #D7FD69;
@@ -26,6 +27,41 @@
     padding-bottom: 76px;
     -webkit-tap-highlight-color: transparent;
   }
+  /* ---------- Hero / welcome ---------- */
+  #hero {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--header-bg);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    transition: opacity .4s ease;
+  }
+  #hero.hide { opacity: 0; pointer-events: none; }
+  #hero .logo { max-width: 160px; margin-bottom: 18px; }
+  #hero .brand { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+  #hero .tag { font-size: 13px; opacity: .7; margin-bottom: 28px; }
+  #hero .welcome { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  #hero .sub { font-size: 14px; opacity: .8; margin-bottom: 32px; max-width: 320px; line-height: 1.5; }
+  #hero .cta {
+    background: var(--accent);
+    color: var(--accent-text);
+    border: 0;
+    border-radius: 35px;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #hero .cta:active { background: var(--accent-dark); }
+  #hero .link { margin-top: 24px; font-size: 12px; opacity: .6; }
+  #hero .link a { color: var(--accent); text-decoration: underline; }
   header {
     background: var(--header-bg);
     color: #fff;
@@ -35,7 +71,6 @@
   header .sub { font-size: 12px; opacity: .85; margin-top: 2px; color: #fff; }
   header a { color: var(--accent); }
   main { padding: 12px; max-width: 640px; margin: 0 auto; }
-
   .card {
     background: var(--card);
     border: 1px solid var(--line);
@@ -46,12 +81,8 @@
   .card h2 { font-size: 15px; margin-bottom: 10px; }
   .hint { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
   .hint b { color: var(--text); }
-
   form.player-form { display: flex; flex-direction: column; gap: 8px; }
-  input, select, button {
-    font-size: 16px; /* iOS zoom prevention */
-    font-family: inherit;
-  }
+  input, select, button { font-size: 16px; font-family: inherit; }
   input, select {
     width: 100%;
     padding: 11px 12px;
@@ -76,7 +107,6 @@
   button.danger { background: #fbeae8; color: var(--red); }
   button.small { padding: 7px 10px; font-size: 13px; border-radius: 7px; }
   button:disabled { opacity: .45; cursor: default; }
-
   .plist { list-style: none; }
   .plist li {
     display: flex;
@@ -95,12 +125,11 @@
     border-radius: 20px;
     white-space: nowrap;
   }
-
   .round-title {
     font-size: 14px;
     font-weight: 700;
     margin: 16px 0 8px;
-    color: var(--accent-dark);
+    color: var(--header-bg);
   }
   .game {
     background: var(--card);
@@ -127,11 +156,7 @@
     gap: 10px;
     padding: 8px 0;
   }
-  .center .score {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 1px;
-  }
+  .center .score { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
   .center .vs { color: var(--muted); font-weight: 700; }
   .game-actions { display: flex; gap: 8px; margin-top: 8px; }
   .entry { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
@@ -139,7 +164,6 @@
   .entry label { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
   .entry .btnrow { display: flex; gap: 8px; }
   .entry .btnrow button { flex: 1; }
-
   table.standings { width: 100%; border-collapse: collapse; font-size: 14px; }
   table.standings th, table.standings td { padding: 8px 4px; text-align: center; border-bottom: 1px solid var(--line); }
   table.standings th { font-size: 11.5px; color: var(--muted); font-weight: 600; }
@@ -148,7 +172,6 @@
   table.standings tr.top2 td { background: #f4f6f7; }
   table.standings tr.top3 td { background: #fdf3ea; }
   .pts { font-weight: 800; color: var(--header-bg); }
-
   nav.tabs {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -174,7 +197,6 @@
   nav.tabs button .ico { font-size: 18px; }
   nav.tabs button.active { color: var(--header-bg); }
   nav.tabs button.active .ico { transform: scale(1.1); }
-
   #toast {
     position: fixed;
     bottom: 90px;
@@ -208,52 +230,60 @@
 </head>
 <body>
 
+<!-- ========== WELCOME / MENU ========== -->
+<div id="hero">
+  <img class="logo" src="https://padelpoint.com.ua/wp-content/uploads/2025/06/logo.svg" alt="Padel Point">
+  <div class="brand">Padel Point</div>
+  <div class="tag">padelpoint.com.ua</div>
+  <div class="welcome">Ласкаво просимо на наш турнір</div>
+  <div class="sub">Організуйте турнір «кожен з кожним у парі» — реєстрація учасників, жеребкування та підрахунок очок.</div>
+  <button class="cta" id="hero-cta">Зареєструвати турнір</button>
+  <div class="link"><a href="https://padelpoint.com.ua" target="_blank" rel="noopener">padelpoint.com.ua</a></div>
+</div>
+
 <header>
   <img src="https://padelpoint.com.ua/wp-content/uploads/2025/06/logo.svg" alt="Padel Point" style="max-width:124px;display:block;margin-bottom:6px">
   <h1>Padel Point</h1>
-  <div class="sub">турнир · каждый с каждым в паре · до 21 очка</div>
+  <div class="sub">турнір · кожен з кожним у парі · до 21 очка</div>
   <a href="https://padelpoint.com.ua" target="_blank" rel="noopener" style="color:var(--accent);font-size:12px;text-decoration:underline">padelpoint.com.ua</a>
 </header>
 
 <main>
-  <!-- УЧАСТНИКИ -->
   <section id="tab-players">
     <div class="card">
-      <h2>Новый участник</h2>
+      <h2>Новий учасник</h2>
       <form class="player-form" id="player-form" autocomplete="off">
         <div class="row2">
-          <input id="f-first" placeholder="Имя" required>
-          <input id="f-last" placeholder="Фамилия" required>
+          <input id="f-first" placeholder="Ім'я" required>
+          <input id="f-last" placeholder="Прізвище" required>
         </div>
-        <input id="f-rating" type="number" step="0.1" min="0" max="10" placeholder="Мировой рейтинг, например 4.2" required>
-        <button type="submit" id="f-submit">Добавить участника</button>
-        <button type="button" class="secondary hidden" id="f-cancel">Отмена</button>
+        <input id="f-rating" type="number" step="0.1" min="0" max="10" placeholder="Світовий рейтинг, наприклад 4.2" required>
+        <button type="submit" id="f-submit">Додати учасника</button>
+        <button type="button" class="secondary hidden" id="f-cancel">Скасувати</button>
       </form>
     </div>
     <div class="card">
-      <h2>Участники: <span class="count-badge" id="p-count">0</span></h2>
+      <h2>Учасники: <span class="count-badge" id="p-count">0</span></h2>
       <div class="hint" id="p-hint"></div>
       <ul class="plist" id="p-list"></ul>
     </div>
   </section>
 
-  <!-- СЕТКА -->
   <section id="tab-draw">
     <div class="card">
-      <h2>Сетка турнира</h2>
+      <h2>Сітка турніру</h2>
       <div class="hint" id="d-info"></div>
       <div class="muted-btns" id="d-buttons"></div>
     </div>
     <div id="d-rounds"></div>
   </section>
 
-  <!-- РЕЙТИНГ -->
   <section id="tab-rating">
     <div class="card">
-      <h2>Рейтинг турнира</h2>
+      <h2>Рейтинг турніру</h2>
       <div class="hint" style="margin-bottom:8px">
-        Очки = сумма очков, набранных игроком во всех партиях (в каждой партии пара
-        набирает столько, сколько назвала; вторая пара получает 21 минус это число).
+        Очки = сума очок, набраних гравцем у всіх партіях (у кожній партії пара
+        набирає стільки, скільки назвала; друга пара отримує 21 мінус це число).
       </div>
       <div id="r-table"></div>
     </div>
@@ -261,8 +291,8 @@
 </main>
 
 <nav class="tabs">
-  <button data-tab="players"><span class="ico">👥</span>Участники</button>
-  <button data-tab="draw"><span class="ico">🗓</span>Сетка</button>
+  <button data-tab="players"><span class="ico">👥</span>Учасники</button>
+  <button data-tab="draw"><span class="ico">🗓</span>Сітка</button>
   <button data-tab="rating"><span class="ico">📊</span>Рейтинг</button>
 </nav>
 
@@ -284,7 +314,7 @@ async function api(url, opts = {}) {
   });
   let data = {};
   try { data = await res.json(); } catch (e) {}
-  if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+  if (!res.ok) throw new Error(data.error || 'Помилка сервера');
   return data;
 }
 
@@ -322,8 +352,6 @@ function renderTabs() {
   $('#tab-rating').classList.toggle('hidden', tab !== 'rating');
 }
 
-/* ---------- Участники ---------- */
-
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -333,8 +361,8 @@ function renderPlayers() {
   $('#p-count').textContent = players.length;
   const ok = S.supported_counts.includes(players.length);
   $('#p-hint').innerHTML = ok
-    ? 'Состав полный — можно генерировать сетку во вкладке «Сетка».'
-    : 'Для турнира нужно <b>12 участников</b> (допускаются также 8 и 4). Добавлено: <b>' +
+    ? 'Склад повний — можна генерувати сітку у вкладці «Сітка».'
+    : 'Для турніру потрібно <b>12 учасників</b> (допускаються також 8 і 4). Додано: <b>' +
       players.length + '</b>.';
   const list = $('#p-list');
   list.innerHTML = players.map(p => `
@@ -351,7 +379,7 @@ function resetForm() {
   $('#f-first').value = '';
   $('#f-last').value = '';
   $('#f-rating').value = '';
-  $('#f-submit').textContent = 'Добавить участника';
+  $('#f-submit').textContent = 'Додати учасника';
   $('#f-cancel').classList.add('hidden');
 }
 
@@ -371,8 +399,8 @@ $('#player-form').addEventListener('submit', async (e) => {
     const data = await api(url, { method: editingPlayerId ? 'PUT' : 'POST', body });
     setState(data);
     resetForm();
-    toast((wasEdit ? 'Участник обновлён' : 'Участник добавлен') +
-      (hadDraw && !S.draw ? '. Сетка сброшена — сгенерируйте заново' : ''));
+    toast((wasEdit ? 'Учасника оновлено' : 'Учасника додано') +
+      (hadDraw && !S.draw ? '. Сітку скинуто — згенеруйте заново' : ''));
   } catch (err) {
     toast(err.message);
   } finally {
@@ -393,18 +421,18 @@ $('#p-list').addEventListener('click', async (e) => {
     $('#f-first').value = p.first_name;
     $('#f-last').value = p.last_name;
     $('#f-rating').value = p.rating;
-    $('#f-submit').textContent = 'Сохранить';
+    $('#f-submit').textContent = 'Зберегти';
     $('#f-cancel').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (btn.dataset.action === 'del-player') {
     const p = S.players.find(x => x.id === id);
-    if (!confirm(`Удалить участника ${p ? p.first_name + ' ' + p.last_name : ''}?` +
-        (S.draw ? '\nСетка и все результаты будут удалены.' : ''))) return;
+    if (!confirm(`Видалити учасника ${p ? p.first_name + ' ' + p.last_name : ''}?` +
+        (S.draw ? '\nСітку та всі результати будуть видалені.' : ''))) return;
     const hadDraw = !!S.draw;
     busy = true;
     try {
       setState(await api(`/api/players/${id}`, { method: 'DELETE' }));
-      toast('Участник удалён' + (hadDraw && !S.draw ? '. Сетка сброшена — сгенерируйте заново' : ''));
+      toast('Учасника видалено' + (hadDraw && !S.draw ? '. Сітку скинуто — згенеруйте заново' : ''));
     } catch (err) {
       toast(err.message);
     } finally {
@@ -413,13 +441,11 @@ $('#p-list').addEventListener('click', async (e) => {
   }
 });
 
-/* ---------- Сетка ---------- */
-
 function sideHtml(pair) {
   const sum = pair.reduce((s, p) => s + p.rating, 0);
   return `<div class="pline-row">${pair.map(p =>
     `<div class="pline"><span>${esc(p.name)}</span><span class="r">★ ${p.rating}</span></div>`
-  ).join('')}<div class="sum">сумма рейтингов: ${sum.toFixed(1)}</div></div>`;
+  ).join('')}<div class="sum">сума рейтингів: ${sum.toFixed(1)}</div></div>`;
 }
 
 function renderDraw() {
@@ -432,11 +458,11 @@ function renderDraw() {
 
   if (!S.draw) {
     info.innerHTML = ready
-      ? `Участников: <b>${n}</b>. Будет <b>${n * (n - 1) / 4}</b> игры в <b>${n - 1}</b> туре: ` +
-        'каждая пара игроков сыграет в паре ровно 1 раз и дважды встретится соперниками. ' +
-        'Слабые миксуются со сильными — суммы рейтингов пар в игре уравновешены.'
-      : `Сетка появится, когда будет <b>12 участников</b> (допускается также 8 или 4). Сейчас: <b>${n}</b>.`;
-    btns.innerHTML = `<button id="btn-gen" ${ready ? '' : 'disabled'}>Сгенерировать сетку</button>`;
+      ? `Учасників: <b>${n}</b>. Буде <b>${n * (n - 1) / 4}</b> ігор у <b>${n - 1}</b> турах: ` +
+        'кожна пара гравців зіграє в парі рівно 1 раз і двічі зустрінеться з суперниками. ' +
+        'Слабкі міксовані з сильними — суми рейтингів пар у грі врівноважені.'
+      : `Сітка з'явиться, коли буде <b>12 учасників</b> (допускаються також 8 або 4). Зараз: <b>${n}</b>.`;
+    btns.innerHTML = `<button id="btn-gen" ${ready ? '' : 'disabled'}>Згенерувати сітку</button>`;
     roundsBox.innerHTML = '';
     const gen = $('#btn-gen');
     if (gen) gen.addEventListener('click', generateDraw);
@@ -447,18 +473,18 @@ function renderDraw() {
   const rounds = [...new Set(games.map(g => g.round))];
   const played = games.filter(g => g.score_a !== null).length;
   info.innerHTML =
-    `Игр сыграно: <b>${played} из ${games.length}</b>. ` +
-    'Каждая пара игроков играет в паре 1 раз и дважды встречается соперниками ' +
-    '(при полном формате «каждый с каждым» это неизбежно) — встречи разнесены по турам.<br>' +
-    'Ввод очков: называете очки одной пары — второй паре автоматически достаётся 21 минус это число.';
-  btns.innerHTML = `<button class="danger" id="btn-regen">Пересоздать сетку</button>`;
+    `Зіграно: <b>${played} з ${games.length}</b>. ` +
+    'Кожна пара гравців грає в парі 1 раз і двічі зустрічається з суперниками ' +
+    '(при повному форматі «кожен з кожним» це неминуче) — зустрічі рознесені по турах.<br>' +
+    'Введення очок: називаєте очки однієї пари — другій парі автоматично дістається 21 мінус це число.';
+  btns.innerHTML = `<button class="danger" id="btn-regen">Перестворити сітку</button>`;
   $('#btn-regen').addEventListener('click', async () => {
-    if (!confirm('Пересоздать сетку? Все результаты будут удалены.')) return;
+    if (!confirm('Перестворити сітку? Усі результати будуть видалені.')) return;
     busy = true;
     try {
       await api('/api/draw', { method: 'DELETE' });
       setState(await api('/api/draw', { method: 'POST' }), { tab: 'draw' });
-      toast('Сетка пересоздана');
+      toast('Сітку перестворено');
     } catch (err) {
       toast(err.message);
     } finally {
@@ -488,8 +514,8 @@ function gameHtml(g) {
   const bWin = g.score_a !== null && !editing && g.score_a < 11;
   const actions = (!editing && g.score_a !== null)
     ? `<div class="game-actions">
-         <button class="secondary small" data-action="edit-game" data-id="${g.id}">Изменить</button>
-         <button class="danger small" data-action="del-game" data-id="${g.id}">Удалить результат</button>
+         <button class="secondary small" data-action="edit-game" data-id="${g.id}">Змінити</button>
+         <button class="danger small" data-action="del-game" data-id="${g.id}">Видалити результат</button>
        </div>`
     : '';
   return `
@@ -505,18 +531,18 @@ function entryHtml(g) {
   const score = g.score_a === null ? '' : g.score_a;
   return `
     <div class="entry">
-      <label>Кто называет очки?
+      <label>Хто називає очки?
         <select id="side-${g.id}">
-          <option value="a">${esc(g.a.map(p => p.name).join(' и '))}</option>
-          <option value="b">${esc(g.b.map(p => p.name).join(' и '))}</option>
+          <option value="a">${esc(g.a.map(p => p.name).join(' і '))}</option>
+          <option value="b">${esc(g.b.map(p => p.name).join(' і '))}</option>
         </select>
       </label>
       <input id="score-${g.id}" type="number" inputmode="numeric" min="0" max="21"
-             placeholder="Очки этой пары (0–21)" value="${score}">
-      <div class="preview" id="preview-${g.id}">Вторая пара получит 21 − очки.</div>
+             placeholder="Очки цієї пари (0–21)" value="${score}">
+      <div class="preview" id="preview-${g.id}">Друга пара отримає 21 − очки.</div>
       <div class="btnrow">
-        <button data-action="save-game" data-id="${g.id}">Сохранить</button>
-        <button class="secondary" data-action="cancel-game">Отмена</button>
+        <button data-action="save-game" data-id="${g.id}">Зберегти</button>
+        <button class="secondary" data-action="cancel-game">Скасувати</button>
       </div>
     </div>`;
 }
@@ -534,14 +560,14 @@ function updatePreview(gameId) {
   const val = parseInt($(`#score-${gameId}`).value, 10);
   const prev = $(`#preview-${gameId}`);
   if (isNaN(val) || val < 0 || val > 21) {
-    prev.textContent = 'Вторая пара получит 21 − очки.';
+    prev.textContent = 'Друга пара отримає 21 − очки.';
     return;
   }
   const other = 21 - val;
   const mine = side === 'a' ? g.a : g.b;
   const theirs = side === 'a' ? g.b : g.a;
-  prev.innerHTML = `<b>${esc(mine.map(p => p.name).join(' и '))}</b> получат по <b>${val}</b>, ` +
-    `<b>${esc(theirs.map(p => p.name).join(' и '))}</b> — по <b>${other}</b>.`;
+  prev.innerHTML = `<b>${esc(mine.map(p => p.name).join(' і '))}</b> отримають по <b>${val}</b>, ` +
+    `<b>${esc(theirs.map(p => p.name).join(' і '))}</b> — по <b>${other}</b>.`;
 }
 
 function bindSideSelect(gameId) {
@@ -563,12 +589,12 @@ $('#d-rounds').addEventListener('click', async (e) => {
     editingGameId = null;
     renderDraw();
   } else if (action === 'del-game') {
-    if (!confirm('Удалить результат этой игры?')) return;
+    if (!confirm('Видалити результат цієї гри?')) return;
     busy = true;
     try {
       editingGameId = null;
       setState(await api(`/api/games/${id}/result`, { method: 'DELETE' }));
-      toast('Результат удалён');
+      toast('Результат видалено');
     } catch (err) {
       toast(err.message);
     } finally {
@@ -579,7 +605,7 @@ $('#d-rounds').addEventListener('click', async (e) => {
     const raw = $(`#score-${id}`).value;
     const val = parseInt(raw, 10);
     if (raw === '' || isNaN(val) || val < 0 || val > 21) {
-      toast('Введите целое число очков от 0 до 21');
+      toast('Введіть ціле число очок від 0 до 21');
       return;
     }
     const scoreA = side === 'a' ? val : 21 - val;
@@ -590,7 +616,7 @@ $('#d-rounds').addEventListener('click', async (e) => {
         method: 'POST',
         body: JSON.stringify({ score_a: scoreA }),
       }));
-      toast('Результат сохранён');
+      toast('Результат збережено');
     } catch (err) {
       toast(err.message);
     } finally {
@@ -605,11 +631,11 @@ async function generateDraw() {
   const btn = $('#btn-gen');
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Считаю сетку…';
+    btn.innerHTML = '<span class="spinner"></span>Рахую сітку…';
   }
   try {
     setState(await api('/api/draw', { method: 'POST' }), { tab: 'draw' });
-    toast('Сетка готова!');
+    toast('Сітка готова!');
   } catch (err) {
     toast(err.message);
     renderDraw();
@@ -618,12 +644,10 @@ async function generateDraw() {
   }
 }
 
-/* ---------- Рейтинг ---------- */
-
 function renderRating() {
   const st = S.standings;
   if (!st.length) {
-    $('#r-table').innerHTML = '<div class="hint">Пока нет участников.</div>';
+    $('#r-table').innerHTML = '<div class="hint">Поки немає учасників.</div>';
     return;
   }
   const rows = st.map((r, i) => `
@@ -639,13 +663,11 @@ function renderRating() {
   $('#r-table').innerHTML = `
     <table class="standings">
       <thead>
-        <tr><th>#</th><th>Игрок</th><th>Рейтинг</th><th>Очки</th><th>Игр</th><th>П</th><th>Пр</th></tr>
+        <tr><th>#</th><th>Гравець</th><th>Рейтинг</th><th>Очки</th><th>Ігор</th><th>П</th><th>Пр</th></tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>`;
 }
-
-/* ---------- Навигация ---------- */
 
 document.querySelectorAll('nav.tabs button').forEach(b => {
   b.addEventListener('click', () => {
@@ -654,7 +676,22 @@ document.querySelectorAll('nav.tabs button').forEach(b => {
   });
 });
 
-load().catch(err => toast('Не удалось загрузить: ' + err.message));
+// ----- Hero dismiss -----
+const hero = $('#hero');
+if (sessionStorage.getItem('heroSeen')) {
+  hero.classList.add('hide');
+  setTimeout(() => { hero.style.display = 'none'; }, 400);
+}
+$('#hero-cta').addEventListener('click', () => {
+  hero.classList.add('hide');
+  setTimeout(() => { hero.style.display = 'none'; }, 400);
+  sessionStorage.setItem('heroSeen', '1');
+  tab = 'players';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+load().catch(err => toast('Не вдалося завантажити: ' + err.message));
 </script>
 </body>
 </html>
