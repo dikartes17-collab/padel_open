@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Падель-турнир</title>
+<style>
+  :root {
+    --accent: #1b8a4b;
+    --accent-dark: #146b39;
+    --bg: #f2f4f3;
+    --card: #ffffff;
+    --text: #1c2320;
+    --muted: #6b7671;
+    --line: #e3e8e5;
+    --orange: #d97b29;
+    --red: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 76px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  header {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 16px 12px;
+  }
+  header h1 { font-size: 19px; font-weight: 700; }
+  header .sub { font-size: 12px; opacity: .85; margin-top: 2px; }
+  main { padding: 12px; max-width: 640px; margin: 0 auto; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .card h2 { font-size: 15px; margin-bottom: 10px; }
+  .hint { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+  .hint b { color: var(--text); }
+
+  form.player-form { display: flex; flex-direction: column; gap: 8px; }
+  input, select, button {
+    font-size: 16px; /* iOS zoom prevention */
+    font-family: inherit;
+  }
+  input, select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: #fff;
+  }
+  input:focus, select:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+  .row2 { display: flex; gap: 8px; }
+  .row2 input { flex: 1; }
+  button {
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 14px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:active { background: var(--accent-dark); }
+  button.secondary { background: #ecefed; color: var(--text); }
+  button.danger { background: #fbeae8; color: var(--red); }
+  button.small { padding: 7px 10px; font-size: 13px; border-radius: 7px; }
+  button:disabled { opacity: .45; cursor: default; }
+
+  .plist { list-style: none; }
+  .plist li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 2px;
+    border-bottom: 1px solid var(--line);
+  }
+  .plist li:last-child { border-bottom: 0; }
+  .plist .name { flex: 1; font-size: 15px; }
+  .plist .rating {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .round-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 16px 0 8px;
+    color: var(--accent-dark);
+  }
+  .game {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+  .side {
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: #f7faf8;
+    border-left: 4px solid var(--accent);
+  }
+  .side.b { border-left-color: var(--orange); }
+  .side .pline { display: flex; justify-content: space-between; font-size: 14.5px; padding: 2px 0; }
+  .side .pline .r { color: var(--muted); font-size: 12.5px; }
+  .side .sum { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .side.winner { background: #e9f7ee; font-weight: 600; }
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .center .score {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .center .vs { color: var(--muted); font-weight: 700; }
+  .game-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .entry { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+  .entry .preview { font-size: 12.5px; color: var(--muted); }
+  .entry label { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+  .entry .btnrow { display: flex; gap: 8px; }
+  .entry .btnrow button { flex: 1; }
+
+  table.standings { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.standings th, table.standings td { padding: 8px 4px; text-align: center; border-bottom: 1px solid var(--line); }
+  table.standings th { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+  table.standings td.name { text-align: left; font-weight: 600; }
+  table.standings tr.top1 td { background: #fff8e1; }
+  table.standings tr.top2 td { background: #f4f6f7; }
+  table.standings tr.top3 td { background: #fdf3ea; }
+  .pts { font-weight: 800; color: var(--accent-dark); }
+
+  nav.tabs {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 10;
+  }
+  nav.tabs button {
+    flex: 1;
+    background: none;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 10px 0 8px;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  nav.tabs button .ico { font-size: 18px; }
+  nav.tabs button.active { color: var(--accent-dark); }
+  nav.tabs button.active .ico { transform: scale(1.1); }
+
+  #toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2c3a33;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    max-width: 90%;
+    display: none;
+    z-index: 20;
+    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  }
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: -3px;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .count-badge { font-weight: 700; color: var(--accent-dark); }
+  .muted-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏆 Падель-турнир</h1>
+  <div class="sub">каждый с каждым в паре · до 21 очка</div>
+</header>
+
+<main>
+  <!-- УЧАСТНИКИ -->
+  <section id="tab-players">
+    <div class="card">
+      <h2>Новый участник</h2>
+      <form class="player-form" id="player-form" autocomplete="off">
+        <div class="row2">
+          <input id="f-first" placeholder="Имя" required>
+          <input id="f-last" placeholder="Фамилия" required>
+        </div>
+        <input id="f-rating" type="number" step="0.1" min="0" max="10" placeholder="Мировой рейтинг, например 4.2" required>
+        <button type="submit" id="f-submit">Добавить участника</button>
+        <button type="button" class="secondary hidden" id="f-cancel">Отмена</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Участники: <span class="count-badge" id="p-count">0</span></h2>
+      <div class="hint" id="p-hint"></div>
+      <ul class="plist" id="p-list"></ul>
+    </div>
+  </section>
+
+  <!-- СЕТКА -->
+  <section id="tab-draw">
+    <div class="card">
+      <h2>Сетка турнира</h2>
+      <div class="hint" id="d-info"></div>
+      <div class="muted-btns" id="d-buttons"></div>
+    </div>
+    <div id="d-rounds"></div>
+  </section>
+
+  <!-- РЕЙТИНГ -->
+  <section id="tab-rating">
+    <div class="card">
+      <h2>Рейтинг турнира</h2>
+      <div class="hint" style="margin-bottom:8px">
+        Очки = сумма очков, набранных игроком во всех партиях (в каждой партии пара
+        набирает столько, сколько назвала; вторая пара получает 21 минус это число).
+      </div>
+      <div id="r-table"></div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-tab="players"><span class="ico">👥</span>Участники</button>
+  <button data-tab="draw"><span class="ico">🗓</span>Сетка</button>
+  <button data-tab="rating"><span class="ico">📊</span>Рейтинг</button>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+let S = null;
+let tab = 'players';
+let editingPlayerId = null;
+let editingGameId = null;
+let busy = false;
+
+const $ = (sel) => document.querySelector(sel);
+
+async function api(url, opts = {}) {
+  const res = await fetch(url, {
+    headers: { 'Content-Type': 'application/json' },
+    ...opts,
+  });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+  return data;
+}
+
+function toast(msg, ms = 3000) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.display = 'none'; }, ms);
+}
+
+function setState(data, opts = {}) {
+  S = data;
+  if (opts.tab) tab = opts.tab;
+  render();
+}
+
+async function load() {
+  setState(await api('/api/state'));
+}
+
+function render() {
+  renderTabs();
+  renderPlayers();
+  renderDraw();
+  renderRating();
+}
+
+function renderTabs() {
+  document.querySelectorAll('nav.tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  $('#tab-players').classList.toggle('hidden', tab !== 'players');
+  $('#tab-draw').classList.toggle('hidden', tab !== 'draw');
+  $('#tab-rating').classList.toggle('hidden', tab !== 'rating');
+}
+
+/* ---------- Участники ---------- */
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderPlayers() {
+  const players = S.players;
+  $('#p-count').textContent = players.length;
+  const ok = S.supported_counts.includes(players.length);
+  $('#p-hint').innerHTML = ok
+    ? 'Состав полный — можно генерировать сетку во вкладке «Сетка».'
+    : 'Для турнира нужно <b>12 участников</b> (допускаются также 8 и 4). Добавлено: <b>' +
+      players.length + '</b>.';
+  const list = $('#p-list');
+  list.innerHTML = players.map(p => `
+    <li>
+      <span class="name">${esc(p.first_name)} ${esc(p.last_name)}</span>
+      <span class="rating">★ ${p.rating}</span>
+      <button class="secondary small" data-action="edit-player" data-id="${p.id}">✎</button>
+      <button class="danger small" data-action="del-player" data-id="${p.id}">✕</button>
+    </li>`).join('');
+}
+
+function resetForm() {
+  editingPlayerId = null;
+  $('#f-first').value = '';
+  $('#f-last').value = '';
+  $('#f-rating').value = '';
+  $('#f-submit').textContent = 'Добавить участника';
+  $('#f-cancel').classList.add('hidden');
+}
+
+$('#player-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (busy) return;
+  const hadDraw = !!(S && S.draw);
+  const wasEdit = !!editingPlayerId;
+  const body = JSON.stringify({
+    first_name: $('#f-first').value,
+    last_name: $('#f-last').value,
+    rating: $('#f-rating').value,
+  });
+  busy = true;
+  try {
+    const url = editingPlayerId ? `/api/players/${editingPlayerId}` : '/api/players';
+    const data = await api(url, { method: editingPlayerId ? 'PUT' : 'POST', body });
+    setState(data);
+    resetForm();
+    toast((wasEdit ? 'Участник обновлён' : 'Участник добавлен') +
+      (hadDraw && !S.draw ? '. Сетка сброшена — сгенерируйте заново' : ''));
+  } catch (err) {
+    toast(err.message);
+  } finally {
+    busy = false;
+  }
+});
+
+$('#f-cancel').addEventListener('click', resetForm);
+
+$('#p-list').addEventListener('click', async (e) => {
+  const btn = e.target.closest('button');
+  if (!btn || busy) return;
+  const id = +btn.dataset.id;
+  if (btn.dataset.action === 'edit-player') {
+    const p = S.players.find(x => x.id === id);
+    if (!p) return;
+    editingPlayerId = id;
+    $('#f-first').value = p.first_name;
+    $('#f-last').value = p.last_name;
+    $('#f-rating').value = p.rating;
+    $('#f-submit').textContent = 'Сохранить';
+    $('#f-cancel').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (btn.dataset.action === 'del-player') {
+    const p = S.players.find(x => x.id === id);
+    if (!confirm(`Удалить участника ${p ? p.first_name + ' ' + p.last_name : ''}?` +
+        (S.draw ? '\nСетка и все результаты будут удалены.' : ''))) return;
+    const hadDraw = !!S.draw;
+    busy = true;
+    try {
+      setState(await api(`/api/players/${id}`, { method: 'DELETE' }));
+      toast('Участник удалён' + (hadDraw && !S.draw ? '. Сетка сброшена — сгенерируйте заново' : ''));
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      busy = false;
+    }
+  }
+});
+
+/* ---------- Сетка ---------- */
+
+function sideHtml(pair) {
+  const sum = pair.reduce((s, p) => s + p.rating, 0);
+  return `<div class="pline-row">${pair.map(p =>
+    `<div class="pline"><span>${esc(p.name)}</span><span class="r">★ ${p.rating}</span></div>`
+  ).join('')}<div class="sum">сумма рейтингов: ${sum.toFixed(1)}</div></div>`;
+}
+
+function renderDraw() {
+  const info = $('#d-info');
+  const btns = $('#d-buttons');
+  const roundsBox = $('#d-rounds');
+
+  const n = S.players.length;
+  const ready = S.supported_counts.includes(n);
+
+  if (!S.draw) {
+    info.innerHTML = ready
+      ? `Участников: <b>${n}</b>. Будет <b>${n * (n - 1) / 4}</b> игры в <b>${n - 1}</b> туре: ` +
+        'каждая пара игроков сыграет в паре ровно 1 раз и дважды встретится соперниками. ' +
+        'Слабые миксуются со сильными — суммы рейтингов пар в игре уравновешены.'
+      : `Сетка появится, когда будет <b>12 участников</b> (допускается также 8 или 4). Сейчас: <b>${n}</b>.`;
+    btns.innerHTML = `<button id="btn-gen" ${ready ? '' : 'disabled'}>Сгенерировать сетку</button>`;
+    roundsBox.innerHTML = '';
+    const gen = $('#btn-gen');
+    if (gen) gen.addEventListener('click', generateDraw);
+    return;
+  }
+
+  const games = S.draw.games;
+  const rounds = [...new Set(games.map(g => g.round))];
+  const played = games.filter(g => g.score_a !== null).length;
+  info.innerHTML =
+    `Игр сыграно: <b>${played} из ${games.length}</b>. ` +
+    'Каждая пара игроков играет в паре 1 раз и дважды встречается соперниками ' +
+    '(при полном формате «каждый с каждым» это неизбежно) — встречи разнесены по турам.<br>' +
+    'Ввод очков: называете очки одной пары — второй паре автоматически достаётся 21 минус это число.';
+  btns.innerHTML = `<button class="danger" id="btn-regen">Пересоздать сетку</button>`;
+  $('#btn-regen').addEventListener('click', async () => {
+    if (!confirm('Пересоздать сетку? Все результаты будут удалены.')) return;
+    busy = true;
+    try {
+      await api('/api/draw', { method: 'DELETE' });
+      setState(await api('/api/draw', { method: 'POST' }), { tab: 'draw' });
+      toast('Сетка пересоздана');
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      busy = false;
+    }
+  });
+
+  roundsBox.innerHTML = rounds.map(r => {
+    const rgames = games.filter(g => g.round === r);
+    return `<div class="round-title">Тур ${r}</div>` + rgames.map(gameHtml).join('');
+  }).join('');
+  bindGameEvents();
+}
+
+function gameHtml(g) {
+  const editing = editingGameId === g.id;
+  let center;
+  if (editing) {
+    center = entryHtml(g);
+  } else if (g.score_a !== null) {
+    const bPts = 21 - g.score_a;
+    center = `<div class="center"><span class="score">${g.score_a} : ${bPts}</span></div>`;
+  } else {
+    center = `<div class="center"><span class="vs">vs</span></div>`;
+  }
+  const aWin = g.score_a !== null && !editing && g.score_a >= 11;
+  const bWin = g.score_a !== null && !editing && g.score_a < 11;
+  const actions = (!editing && g.score_a !== null)
+    ? `<div class="game-actions">
+         <button class="secondary small" data-action="edit-game" data-id="${g.id}">Изменить</button>
+         <button class="danger small" data-action="del-game" data-id="${g.id}">Удалить результат</button>
+       </div>`
+    : '';
+  return `
+    <div class="game">
+      <div class="side a ${aWin ? 'winner' : ''}">${sideHtml(g.a)}</div>
+      ${center}
+      <div class="side b ${bWin ? 'winner' : ''}">${sideHtml(g.b)}</div>
+      ${actions}
+    </div>`;
+}
+
+function entryHtml(g) {
+  const score = g.score_a === null ? '' : g.score_a;
+  return `
+    <div class="entry">
+      <label>Кто называет очки?
+        <select id="side-${g.id}">
+          <option value="a">${esc(g.a.map(p => p.name).join(' и '))}</option>
+          <option value="b">${esc(g.b.map(p => p.name).join(' и '))}</option>
+        </select>
+      </label>
+      <input id="score-${g.id}" type="number" inputmode="numeric" min="0" max="21"
+             placeholder="Очки этой пары (0–21)" value="${score}">
+      <div class="preview" id="preview-${g.id}">Вторая пара получит 21 − очки.</div>
+      <div class="btnrow">
+        <button data-action="save-game" data-id="${g.id}">Сохранить</button>
+        <button class="secondary" data-action="cancel-game">Отмена</button>
+      </div>
+    </div>`;
+}
+
+function bindGameEvents() {
+  document.querySelectorAll('#d-rounds [id^="score-"]').forEach(inp => {
+    const id = inp.id.split('-')[1];
+    inp.addEventListener('input', () => updatePreview(id));
+  });
+}
+
+function updatePreview(gameId) {
+  const g = S.draw.games.find(x => x.id === +gameId);
+  const side = $(`#side-${gameId}`).value;
+  const val = parseInt($(`#score-${gameId}`).value, 10);
+  const prev = $(`#preview-${gameId}`);
+  if (isNaN(val) || val < 0 || val > 21) {
+    prev.textContent = 'Вторая пара получит 21 − очки.';
+    return;
+  }
+  const other = 21 - val;
+  const mine = side === 'a' ? g.a : g.b;
+  const theirs = side === 'a' ? g.b : g.a;
+  prev.innerHTML = `<b>${esc(mine.map(p => p.name).join(' и '))}</b> получат по <b>${val}</b>, ` +
+    `<b>${esc(theirs.map(p => p.name).join(' и '))}</b> — по <b>${other}</b>.`;
+}
+
+function bindSideSelect(gameId) {
+  const sel = $(`#side-${gameId}`);
+  if (sel) sel.addEventListener('change', () => updatePreview(gameId));
+}
+
+$('#d-rounds').addEventListener('click', async (e) => {
+  const btn = e.target.closest('button');
+  if (!btn || busy) return;
+  const id = +btn.dataset.id;
+  const action = btn.dataset.action;
+  if (action === 'edit-game') {
+    editingGameId = id;
+    renderDraw();
+    bindSideSelect(id);
+    updatePreview(id);
+  } else if (action === 'cancel-game') {
+    editingGameId = null;
+    renderDraw();
+  } else if (action === 'del-game') {
+    if (!confirm('Удалить результат этой игры?')) return;
+    busy = true;
+    try {
+      editingGameId = null;
+      setState(await api(`/api/games/${id}/result`, { method: 'DELETE' }));
+      toast('Результат удалён');
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      busy = false;
+    }
+  } else if (action === 'save-game') {
+    const side = $(`#side-${id}`).value;
+    const raw = $(`#score-${id}`).value;
+    const val = parseInt(raw, 10);
+    if (raw === '' || isNaN(val) || val < 0 || val > 21) {
+      toast('Введите целое число очков от 0 до 21');
+      return;
+    }
+    const scoreA = side === 'a' ? val : 21 - val;
+    busy = true;
+    try {
+      editingGameId = null;
+      setState(await api(`/api/games/${id}/result`, {
+        method: 'POST',
+        body: JSON.stringify({ score_a: scoreA }),
+      }));
+      toast('Результат сохранён');
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      busy = false;
+    }
+  }
+});
+
+async function generateDraw() {
+  if (busy) return;
+  busy = true;
+  const btn = $('#btn-gen');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Считаю сетку…';
+  }
+  try {
+    setState(await api('/api/draw', { method: 'POST' }), { tab: 'draw' });
+    toast('Сетка готова!');
+  } catch (err) {
+    toast(err.message);
+    renderDraw();
+  } finally {
+    busy = false;
+  }
+}
+
+/* ---------- Рейтинг ---------- */
+
+function renderRating() {
+  const st = S.standings;
+  if (!st.length) {
+    $('#r-table').innerHTML = '<div class="hint">Пока нет участников.</div>';
+    return;
+  }
+  const rows = st.map((r, i) => `
+    <tr class="${i < 3 ? 'top' + (i + 1) : ''}">
+      <td>${i + 1}</td>
+      <td class="name">${esc(r.name)}</td>
+      <td>★ ${r.rating}</td>
+      <td class="pts">${r.points}</td>
+      <td>${r.games}</td>
+      <td>${r.wins}</td>
+      <td>${r.losses}</td>
+    </tr>`).join('');
+  $('#r-table').innerHTML = `
+    <table class="standings">
+      <thead>
+        <tr><th>#</th><th>Игрок</th><th>Рейтинг</th><th>Очки</th><th>Игр</th><th>П</th><th>Пр</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+/* ---------- Навигация ---------- */
+
+document.querySelectorAll('nav.tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    tab = b.dataset.tab;
+    render();
+  });
+});
+
+load().catch(err => toast('Не удалось загрузить: ' + err.message));
+</script>
+</body>
+</html>
