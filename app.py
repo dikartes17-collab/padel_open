@@ -255,8 +255,11 @@ def lan_ip() -> str:
         s.close()
 
 
+# Ініціалізація БД при імпорті модуля (потрібно для gunicorn/Render)
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     port = int(os.environ.get("PORT", "8000"))
     ip = lan_ip()
     print("=" * 50)
