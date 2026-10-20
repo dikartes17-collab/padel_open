@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Padel Point — турнір</title>
+<title>Just Padel — турнір</title>
 <link rel="icon" href="https://padelpoint.com.ua/wp-content/uploads/2025/06/favicon-150x150.png" sizes="32x32">
 <style>
   :root {
-    --accent: #D7FD69;
-    --accent-dark: #b8e04a;
-    --accent-text: #15242E;
-    --bg: #f5f5f5;
-    --card: #ffffff;
-    --text: #15242E;
-    --muted: #6b7671;
-    --line: #e3e8e5;
-    --orange: #D7FD69;
-    --red: #c0392b;
-    --header-bg: #15242E;
+    --accent: #ffffff;
+    --accent-dark: #cccccc;
+    --accent-text: #000000;
+    --bg: #0a0a0a;
+    --card: #1a1a1a;
+    --text: #ffffff;
+    --muted: #999999;
+    --line: #333333;
+    --orange: #ffffff;
+    --red: #ff4444;
+    --header-bg: #000000;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     padding-bottom: 76px;
@@ -43,38 +43,41 @@
     transition: opacity .4s ease;
   }
   #hero.hide { opacity: 0; pointer-events: none; }
-  #hero .logo { max-width: 160px; margin-bottom: 18px; }
-  #hero .brand { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
-  #hero .tag { font-size: 13px; opacity: .7; margin-bottom: 28px; }
-  #hero .welcome { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
-  #hero .sub { font-size: 14px; opacity: .8; margin-bottom: 32px; max-width: 320px; line-height: 1.5; }
+  #hero .logo { max-width: 120px; margin-bottom: 18px; }
+  #hero .brand { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin-bottom: 6px; text-transform: uppercase; }
+  #hero .tag { font-size: 13px; opacity: .5; margin-bottom: 28px; letter-spacing: 2px; text-transform: uppercase; }
+  #hero .welcome { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+  #hero .sub { font-size: 14px; opacity: .7; margin-bottom: 32px; max-width: 320px; line-height: 1.5; }
   #hero .cta {
-    background: var(--accent);
-    color: var(--accent-text);
+    background: #fff;
+    color: #000;
     border: 0;
-    border-radius: 35px;
-    padding: 14px 32px;
-    font-size: 16px;
-    font-weight: 700;
+    border-radius: 0;
+    padding: 14px 40px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   #hero .cta:active { background: var(--accent-dark); }
-  #hero .link { margin-top: 24px; font-size: 12px; opacity: .6; }
-  #hero .link a { color: var(--accent); text-decoration: underline; }
+  #hero .link { margin-top: 24px; font-size: 12px; opacity: .4; }
+  #hero .link a { color: #fff; text-decoration: underline; }
   header {
     background: var(--header-bg);
     color: #fff;
     padding: 14px 16px 12px;
+    border-bottom: 1px solid #222;
   }
-  header h1 { font-size: 19px; font-weight: 700; color: #fff; }
-  header .sub { font-size: 12px; opacity: .85; margin-top: 2px; color: #fff; }
-  header a { color: var(--accent); }
+  header h1 { font-size: 19px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+  header .sub { font-size: 12px; opacity: .6; margin-top: 2px; color: #fff; }
+  header a { color: #fff; opacity: .6; }
   main { padding: 12px; max-width: 640px; margin: 0 auto; }
   .card {
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 14px;
     margin-bottom: 12px;
   }
@@ -87,24 +90,28 @@
     width: 100%;
     padding: 11px 12px;
     border: 1px solid var(--line);
-    border-radius: 35px;
-    background: #fff;
+    border-radius: 0;
+    background: #1a1a1a;
+    color: #fff;
   }
-  input:focus, select:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+  input:focus, select:focus { outline: 2px solid #fff; border-color: #fff; }
   .row2 { display: flex; gap: 8px; }
   .row2 input { flex: 1; }
   button {
     border: 0;
-    border-radius: 35px;
+    border-radius: 0;
     padding: 11px 14px;
-    background: var(--accent);
-    color: var(--accent-text);
-    font-weight: 600;
+    background: #fff;
+    color: #000;
+    font-weight: 500;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
   }
-  button:active { background: var(--accent-dark); }
-  button.secondary { background: #ecefed; color: var(--text); }
-  button.danger { background: #fbeae8; color: var(--red); }
+  button:active { background: #ddd; }
+  button.secondary { background: #222; color: #fff; }
+  button.danger { background: #331111; color: #ff6666; }
   button.small { padding: 7px 10px; font-size: 13px; border-radius: 7px; }
   button:disabled { opacity: .45; cursor: default; }
   .plist { list-style: none; }
@@ -134,17 +141,17 @@
   .game {
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 10px 12px;
     margin-bottom: 10px;
   }
   .side {
     padding: 6px 8px;
-    border-radius: 8px;
-    background: #f7faf8;
-    border-left: 4px solid var(--header-bg);
+    border-radius: 0;
+    background: #111;
+    border-left: 4px solid #fff;
   }
-  .side.b { border-left-color: var(--accent); }
+  .side.b { border-left-color: #888; }
   .side .pline { display: flex; justify-content: space-between; font-size: 14.5px; padding: 2px 0; }
   .side .pline .r { color: var(--muted); font-size: 12.5px; }
   .side .sum { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
@@ -171,13 +178,13 @@
   table.standings tr.top1 td { background: #fff8e1; }
   table.standings tr.top2 td { background: #f4f6f7; }
   table.standings tr.top3 td { background: #fdf3ea; }
-  .pts { font-weight: 800; color: var(--header-bg); }
+  .pts { font-weight: 800; color: #fff; }
   nav.tabs {
     position: fixed;
     bottom: 0; left: 0; right: 0;
     display: flex;
-    background: #fff;
-    border-top: 1px solid var(--line);
+    background: #111;
+    border-top: 1px solid #333;
     padding-bottom: env(safe-area-inset-bottom);
     z-index: 10;
   }
@@ -185,7 +192,7 @@
     flex: 1;
     background: none;
     color: var(--muted);
-    font-weight: 600;
+    font-weight: 500;
     font-size: 12.5px;
     padding: 10px 0 8px;
     border-radius: 0;
@@ -195,7 +202,7 @@
     gap: 2px;
   }
   nav.tabs button .ico { font-size: 18px; }
-  nav.tabs button.active { color: var(--header-bg); }
+  nav.tabs button.active { color: #fff; }
   nav.tabs button.active .ico { transform: scale(1.1); }
   #toast {
     position: fixed;
@@ -223,7 +230,7 @@
     margin-right: 6px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .count-badge { font-weight: 700; color: var(--header-bg); }
+  .count-badge { font-weight: 700; color: #fff; }
   .muted-btns { display: flex; gap: 8px; margin-top: 10px; }
   .hidden { display: none !important; }
 </style>
@@ -232,20 +239,20 @@
 
 <!-- ========== WELCOME / MENU ========== -->
 <div id="hero">
-  <img class="logo" src="https://padelpoint.com.ua/wp-content/uploads/2025/06/logo.svg" alt="Padel Point">
-  <div class="brand">Padel Point</div>
-  <div class="tag">padelpoint.com.ua</div>
+  <img class="logo" src="https://www.justpadelodesa.com/favicon.ico" alt="Just Padel" style="max-width:64px;margin-bottom:18px">
+  <div class="brand">Just Padel</div>
+  <div class="tag">justpadelodesa.com</div>
   <div class="welcome">Ласкаво просимо на наш турнір</div>
   <div class="sub">Організуйте турнір «кожен з кожним у парі» — реєстрація учасників, жеребкування та підрахунок очок.</div>
   <button class="cta" id="hero-cta">Зареєструвати турнір</button>
-  <div class="link"><a href="https://padelpoint.com.ua" target="_blank" rel="noopener">padelpoint.com.ua</a></div>
+  <div class="link"><a href="https://www.justpadelodesa.com" target="_blank" rel="noopener">justpadelodesa.com</a></div>
 </div>
 
 <header>
-  <img src="https://padelpoint.com.ua/wp-content/uploads/2025/06/logo.svg" alt="Padel Point" style="max-width:124px;display:block;margin-bottom:6px">
-  <h1>Padel Point</h1>
+  <img src="https://www.justpadelodesa.com/favicon.ico" alt="Just Padel" style="max-width:48px;display:block;margin-bottom:6px">
+  <h1>Just Padel</h1>
   <div class="sub">турнір · кожен з кожним у парі · до 21 очка</div>
-  <a href="https://padelpoint.com.ua" target="_blank" rel="noopener" style="color:var(--accent);font-size:12px;text-decoration:underline">padelpoint.com.ua</a>
+  <a href="https://www.justpadelodesa.com" target="_blank" rel="noopener" style="color:#fff;opacity:.6;font-size:12px;text-decoration:underline">justpadelodesa.com</a>
 </header>
 
 <main>
